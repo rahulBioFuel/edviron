@@ -16,7 +16,7 @@ const orderStatusSchema = new mongoose.Schema({
     },
     payment_mode: {
         type: String,
-        enum: ['upi', 'card', 'netbanking', 'wallet', 'bank_transfer'],
+        enum: ['upi', 'card', 'netbanking', 'wallet', 'bank_transfer', 'pending'],
         required: true
     },
     payment_details: {

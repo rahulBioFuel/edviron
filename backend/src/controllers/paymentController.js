@@ -54,7 +54,7 @@ const createPayment = async (req, res) => {
             transaction_amount: order_amount,
             payment_mode: 'pending',
             payment_details: 'Payment initiated',
-            bank_reference: 'pending',
+            bank_reference: 'RAZORPAY_PENDING',
             payment_message: 'Payment order created',
             status: 'pending',
             razorpay_order_id: razorpayOrder.id

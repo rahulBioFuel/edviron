@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { transactionAPI } from '../services/apiService';
+import { analyticsAPI } from '../services/apiService';
 import { formatCurrency, formatDate, getStatusColor } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -20,34 +20,12 @@ const Dashboard = () => {
             console.log('User authenticated:', isAuthenticated);
             console.log('Auth loading:', authLoading);
 
-            // Test the stats call separately first
-            console.log('Testing stats API call...');
-            try {
-                const statsResponse = await transactionAPI.getTransactionStats();
-                console.log('Stats call successful:', statsResponse);
-                setStats(statsResponse.data.data);
-            } catch (statsError) {
-                console.error('Stats API call failed:', statsError);
-                console.error('Stats error response:', statsError.response?.data);
-                console.error('Stats error status:', statsError.response?.status);
-                console.error('Request headers:', statsError.config?.headers);
-                throw statsError;
-            }
+            // Use the new analytics API for better data handling
+            const analyticsData = await analyticsAPI.getDashboardAnalytics();
+            console.log('Analytics data received:', analyticsData);
 
-            // Test the transactions call
-            console.log('Testing transactions API call...');
-            try {
-                const transactionsResponse = await transactionAPI.getAllTransactions({
-                    limit: 5,
-                    sort: 'payment_time',
-                    order: 'desc'
-                });
-                console.log('Transactions call successful:', transactionsResponse);
-                setRecentTransactions(transactionsResponse.data.data.transactions);
-            } catch (transError) {
-                console.error('Transactions API call failed:', transError);
-                throw transError;
-            }
+            setStats(analyticsData.stats);
+            setRecentTransactions(analyticsData.recentTransactions);
 
             console.log('Dashboard data fetched successfully');
         } catch (error) {
